@@ -1,11 +1,21 @@
 import org.junit.Test;
 
+import java.util.LinkedList;
+
 import static org.junit.Assert.*;
 
 public class ListTest {
 
     @Test
     public void copyOf() {
+        //LinkedList de api Java pour comparer avec la liste initiale et la copie
+        LinkedList ll=new LinkedList();
+        ll.add("a");
+        ll.add("b");
+        ll.add("c");
+        ll.add("d");
+        int i=0;
+
         List l= new List();
         l.addMaillon(new Maillon("a"));
         l.addMaillon(new Maillon("b"));
@@ -14,11 +24,23 @@ public class ListTest {
         List lcp =l.copyOf();
         Maillon a =l.tete;
         Maillon b =lcp.tete;
+
+
         while(a!=null&&b!=null){
+            //la copie est bien la copie de la liste "List"
             assertEquals(a.getInfo(),b.getInfo());
+            //la copie est la meme que celle de l'api java
+            assertEquals(ll.get(i),a.getInfo());
+            //la liste initiale est la même que celle de l'api java
+            assertEquals(ll.get(i),b.getInfo());
+
             a=a.getSuiv();
             b=b.getSuiv();
+            i++;
         }
+
+
+
     }
 
     @Test
@@ -30,24 +52,55 @@ public class ListTest {
         l.addMaillon(new Maillon(4));
         assertTrue(l.tete.getSuiv()!=null);
         assertTrue(l.tete.getSuiv().getSuiv()==null);
-    }
 
 
-    @Test
-    public void dansOrdre() {
+        l.addMaillon(new Maillon(5));
+
+        //comparaison avec API JAVA (l'ordre n'est pas à verifier ici)
+        LinkedList ll=new LinkedList();
+        ll.add(3);
+        ll.add(4);
+        ll.add(5);
+        Maillon a =l.tete;
+        for (int i = 0; i < ll.size(); i++) {
+            assertEquals(ll.get(i),a.getInfo());
+            a=a.getSuiv();
+        }
+
+
+
+
+
+
+        //Ordre
         List l1= new List();
         l1.addMaillon(new Maillon(1));
         l1.addMaillon(new Maillon(4));
         l1.addMaillon(new Maillon(7));
         l1.addMaillon(new Maillon(10));
-        Maillon a =l1.tete;
+         a =l1.tete;
         while(a.getSuiv()!=null){
             assertTrue(a.compareTo(a.getSuiv()) <0);
             a=a.getSuiv();
 
         }
+        //ajout au début
         l1.addMaillon(new Maillon(0));
+        a =l1.tete;
+        while(a.getSuiv()!=null){
+            assertTrue(a.compareTo(a.getSuiv()) <0);
+            a=a.getSuiv();
+
+        }
+        //ajout au milieu
         l1.addMaillon(new Maillon(2));
+        a =l1.tete;
+        while(a.getSuiv()!=null){
+            assertTrue(a.compareTo(a.getSuiv()) <0);
+            a=a.getSuiv();
+
+        }
+        //ajout a la fin
         l1.addMaillon(new Maillon(11));
         a =l1.tete;
         while(a.getSuiv()!=null){
@@ -55,5 +108,12 @@ public class ListTest {
             a=a.getSuiv();
 
         }
+
+
+
+
     }
+
+
+
 }

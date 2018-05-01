@@ -1,9 +1,17 @@
+/**
+ * La classe Cellule qui correspond à une cellule vivante dans le Jeu
+ */
 public class Cellule implements Comparable<Cellule> {
 
     private int ligne;
     private int colonne;
     private int nbvois;
 
+    /**
+     * Constructeur par défaut
+     * @param ligne
+     * @param colonne
+     */
     public Cellule(int ligne, int colonne){
         this.ligne = ligne;
         this.colonne = colonne;
