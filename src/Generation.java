@@ -3,29 +3,64 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Generation {
+    /**
+     * Les lignes et les collones de la Cellule étant des entiers
+     * ils ne peuvent pas depasser la valeur maximale de Integer,on la prend
+     * comme limite pour la configuration "infinie";
+     */
     private static int  taille=Integer.MAX_VALUE;
+    /**
+     * Indique si les mondes sont circulaire
+     * Si la valeur de "taille" est modifié
+     * @see #taille
+     * et circ est à faux, alors on a les mondes avec les bords.
+     */
     private static boolean circ=false;
 
     private List<Cellule> grille ;
 
+    /**
+     * Initialise une génération à partir d'un ficher avec le nom donné en paramètre
+     * @param nom Fichier à initialiser
+     */
     public Generation (String nom){
         grille=new List<>();
         lireFichier(grille,nom);
     }
 
+    /**
+     * Initialise une generation à partir d'une grille existante
+     * @param grille La generation à copier
+     */
     public Generation (List grille){
         this.grille=grille;
 
     }
 
+    /**
+     * Modifer la grille principale de génération
+     * @param grille nouvelle génération
+     */
     public void setGrille(List<Cellule> grille){
         this.grille=grille;
     }
 
+    /**
+     *
+     * @return Génération correspondate
+     */
     public List<Cellule> getGrille() {
         return grille;
     }
 
+
+    /**
+     * Rassamblment de toutes les fonction déstinées à calculer
+     * la génération suivante
+     * @param grille Génération initiale
+     * @return Generation d'après
+     * @see #calculerSomme(List[]) {@link #sommeM0Nbvois(List, List)}{@link #eliminerNonConformes(List)}
+     */
     public static List nextGen(List grille){
         List ng=calculerSomme(calculerProjections(grille));
         ng = sommeM0Nbvois(grille,ng);
@@ -33,11 +68,19 @@ public class Generation {
         return ng;
     }
 
+
+    /**
+     * Supprime les maillons qui contiennent les Cellules qui ne vérifient pas les régles du jeu
+     *
+     * @param grille Génération à "purifier"
+     * @return La génération finale
+     */
     public static List eliminerNonConformes(List grille) {
         Maillon a = grille.tete;
         List ng = new List();
         while(a!=null){
             if(((Cellule)a.getInfo()).getNbvois()==3 || ((Cellule)a.getInfo()).getNbvois()==1002 || ((Cellule)a.getInfo()).getNbvois()==1003){
+                //si le nombre de voisins d'une case morte est 3 (vivante 3 ou 2) on la garde dans une nouvelle grille
                 Cellule cell=new Cellule( ((Cellule)a.getInfo()).getLigne(),((Cellule)a.getInfo()).getColonne(),1);
                 ng.addMaillon(new Maillon(cell));
             }
@@ -46,6 +89,15 @@ public class Generation {
         return ng;
     }
 
+
+    /**
+     * Recherche de la valeur minimale parmi les 8 pointeurs
+     * sur des génétaions "projetés" afin d'en trouver des doublons eventuels
+     * parmi les autres pointeurs.
+     * @param listM Liste de maillons-pointerus sur des généraion projetes d'un vecteur (a,b) a,b={-1,1,0},a!=b!=0;
+     * @return l'indice du maillon minimale
+     * @see #sommeM0Nbvois(List, List)
+     */
     public static int min(Maillon[] listM){
         Maillon min = listM[0];
         int i=0;
@@ -58,12 +110,24 @@ public class Generation {
         return i;
     }
 
+    /**
+     * Construit la liste qui indique le
+     * @param projects le tableu avec les générations projetés
+     * @return la Liste résultante de la somme de toutes les maillons des 8 listes
+     *      * des générations projetés d'un vecteur (a,b) a,b={-1,1,0},a!=b!=0;
+     * @see
+     * #chercherVoisins(int, Maillon[])
+     */
     public static List calculerSomme(List[] projects){
         List somme = new List<Cellule>();
         Maillon[] listM= new Maillon[8];
+        //initialise la liste de pointeurs sur chaque génération projeté
         for (int i = 0; i < 8; i++) {
             listM[i]=projects[i].tete;
         }
+        //tanqu'il existent des cellules dans une des 8 géneration
+        //chercher les maillons avec le meme nombre de voisins et stocker dans
+        // une nouvelle liste somme
         while (!estTraite(listM)){
             int min =min(listM);
             somme.addMaillon(chercherVoisins(min,listM));
@@ -71,9 +135,18 @@ public class Generation {
         return somme;
     }
 
+    /**
+     * Sert à trouver les doublons dans la liste des projections
+     * @param min l'indice du pointeur qui sert du "pivot"
+     * @param listM la liste des projections
+     * @return le Maillon resultant de l'addition de toutes Cellules
+     * ayant les mêmes coordonées que le pivot
+     */
     private static Maillon chercherVoisins(int min, Maillon[] listM) {
+        int ligne =((Cellule)listM[min].getInfo()).getLigne();
+        int colonne=((Cellule)listM[min].getInfo()).getColonne();
 
-        Cellule cell=new Cellule(((Cellule)listM[min].getInfo()).getLigne(),((Cellule)listM[min].getInfo()).getColonne(),0);
+        Cellule cell=new Cellule(ligne,colonne,0);
         Maillon m= new Maillon(cell);
         for (int i = 0; i < 8; i++) {
             if (listM[i]!=null&&listM[i].compareTo(m)==0) {

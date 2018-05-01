@@ -28,6 +28,9 @@ qu’un du type oscillateur est du type vaisseau
          String s=stable(gen.getGrille(),i);
          String v=vaisseau(gen.getGrille(),i);
          String o=oscillateur(gen.getGrille(),i);
+         //si au cours de quatre verification on a
+         //pas pu conclure le type de comportement asymptotique
+         //alors il est Inconnu
          if(!m.equals("")||!s.equals("")||!v.equals("")||!o.equals(""))
              return m+"\n"+s+"\n"+o+"\n"+v+"\n";
          else
@@ -205,12 +208,15 @@ qu’un du type oscillateur est du type vaisseau
     public static boolean egaux (List g1,List g2){
         Maillon a = g1.tete;
         Maillon b = g2.tete;
+        //si vides dès le début
         if(a==null && b==null)
             return true;
+        //si differentes dès le début
         if(a==null&&b!=null)
             return false;
         if(b==null&&a!=null)
             return false;
+        //sinon on verifie l'égalité maillon à maillon
         while (a!=null&&b!=null){
             if(a.compareTo(b)!=0) return false;
             a=(a.getSuiv());
@@ -232,6 +238,8 @@ qu’un du type oscillateur est du type vaisseau
         List g3=new List();
         Maillon a = g1.tete;
         Maillon b = g2.tete;
+        //on parcours les deux generations en construisant une liste
+        //qui est le resultat de la difference de la generation 1 et 2
         while (a!=null&&b!=null){
             int a3l = ((Cellule)a.getInfo()).getLigne()-((Cellule)b.getInfo()).getLigne();
             int a3c = ((Cellule)a.getInfo()).getColonne()-((Cellule)b.getInfo()).getColonne();
@@ -242,6 +250,9 @@ qu’un du type oscillateur est du type vaisseau
         if (a!=null || b!=null)
             return false;
         Maillon c = g3.tete;
+        //si toutes les valeurs de la liste de difference
+        //sont les même on conclut que la génération 2 est bien
+        //la génération 1 déplacé de A lignes et B colonnes
         while (c!=null&&c.getSuiv()!=null){
             if( c.compareTo(c.getSuiv()) !=0)
                 return false;
