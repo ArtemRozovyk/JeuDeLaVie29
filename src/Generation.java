@@ -136,9 +136,9 @@ public class Generation {
     }
 
     /**
-     * Sert à trouver les doublons dans la liste des projections
+     * Sert à trouver les doublons dans les listes des projections
      * @param min l'indice du pointeur qui sert du "pivot"
-     * @param listM la liste des projections
+     * @param listM Le tableau des pointeurs
      * @return le Maillon resultant de l'addition de toutes Cellules
      * ayant les mêmes coordonées que le pivot
      */
@@ -149,6 +149,8 @@ public class Generation {
         Cellule cell=new Cellule(ligne,colonne,0);
         Maillon m= new Maillon(cell);
         for (int i = 0; i < 8; i++) {
+            //si l'un des pointeurs est égal à la celulle minimale
+            //alors on incremente le nombre de voisins de cette cellule
             if (listM[i]!=null&&listM[i].compareTo(m)==0) {
                 ((Cellule)m.getInfo()).setNbvois(((Cellule)m.getInfo()).getNbvois()+1);
                 listM[i]=listM[i].getSuiv();
@@ -157,6 +159,11 @@ public class Generation {
         return m;
     }
 
+    /**
+     * Sert à verifier s'il reste encore des mailons dans le talbeu des pointeurs
+     * @param listM Le tableau des pointeurs
+     * @return Vrai si tout les pointeurs sont null
+     */
     private static boolean estTraite(Maillon[] listM) {
         for (Maillon x :listM){
             if (x!=null) return false;
@@ -164,23 +171,22 @@ public class Generation {
         return true;
     }
 
-    public static List initM0(List m0){
-        List nl= new List();
-        Maillon a = m0.tete;
-        while(a!=null){
-            Cellule cell=new Cellule( ((Cellule)a.getInfo()).getLigne(),((Cellule)a.getInfo()).getColonne(),1000);
-            nl.addMaillon(new Maillon(cell));
-            a=a.getSuiv();
-        }
-        return nl;
-    }
 
+    /**
+     * Additionnement de la configuration initiale
+     * et de la liste résultant de la somme de tout les maillons dans des listes des projections.
+     * @param m0 configuration initiale
+     * @param somme La somme des 8 projections
+     * @return La liste qui permet de deduire la generation suivante (nescessite l'élimination des cellules qui restent pas dans la generation suivante)
+     */
     private static List sommeM0Nbvois(List m0, List somme){
-        List m0mille=initM0(m0);
-        Maillon a= m0mille.tete;
+
+        Maillon a= m0.tete;
         while (a!=null){
             Maillon b = somme.tete;
             while(b!=null){
+                //les celulles de la génération initiale ont le nombre de voisins+1000
+                //pour pouvoir les distanguer des celulles mortes lors de l'élimination
                 if(a.compareTo(b)==0){
                     ((Cellule)b.getInfo()).setNbvois( ((Cellule)b.getInfo()).getNbvois() +1000);
                     break;
@@ -192,6 +198,14 @@ public class Generation {
         return somme;
     }
 
+    /**
+     * Projeter la configuration initiale dans les 8 direction afin de pouvoir
+     * détecter le nombre de voisins
+     * @param grille configuration initiale
+     * @return le tableau de génération projetés d'un vecteur (a,b) a,b={-1,1,0}, a!=b!=0;
+     * @see #projeter(List, Couple)
+     *
+     */
     private static List[] calculerProjections( List grille) {
         List [] project = new List[8];
         //couples qui designent les vecteur pour les 8 directions
@@ -211,39 +225,52 @@ public class Generation {
         return project;
     }
 
+    /**
+     * Ajouter le vecteur donné à chaque couple ligne,colonne de la generation
+     * @param grille Génération initialle
+     * @param couple Le vector à appliquer
+     * @return La generation projeté d'un vecteur
+     */
     public static List projeter(List grille, Couple couple) {
         List l = new List();
         Maillon a = grille.tete;
         boolean surfrontiere=false;
-        int cply=couple.getLigne();
-        int cplx=couple.getColonne();
+        int cplLigne=couple.getLigne();
+        int cplColonne=couple.getColonne();
         while(a!=null){
-            int clgn=((Cellule)a.getInfo()).getLigne();
-            int ccln=((Cellule)a.getInfo()).getColonne();
 
-            if (cplx+ccln>taille){
-                ccln=-taille-cplx;
-                surfrontiere=true;
-            }
-
-            if (cplx+ccln<-taille){
-                ccln=taille-cplx;
+            int cellueLgn=((Cellule)a.getInfo()).getLigne();
+            int celulleCln=((Cellule)a.getInfo()).getColonne();
+            //si la celulle projete de vecteur est depasse la taille ou la taille*(-1)
+            //on concult qu'elle est sur le bord
+            if (cplColonne+celulleCln>taille){
+                celulleCln=-taille-cplColonne;
                 surfrontiere=true;
             }
 
-            if (cply+clgn>taille){
-                clgn=-taille-cply;
+            if (cplColonne+celulleCln<-taille){
+                celulleCln=taille-cplColonne;
                 surfrontiere=true;
             }
-            if (cply+clgn<-taille){
-                clgn=taille-cply;
+
+            if (cplLigne+cellueLgn>taille){
+                cellueLgn=-taille-cplLigne;
                 surfrontiere=true;
             }
-            Cellule cell=new Cellule(cply+clgn,cplx+ccln,1);
+            if (cplLigne+cellueLgn<-taille){
+                cellueLgn=taille-cplLigne;
+                surfrontiere=true;
+            }
+
+            Cellule cell=new Cellule(cplLigne+cellueLgn,cplColonne+celulleCln,1);
+            //si les mondes circulaires ou la celulle est à l'interieur on l'ajoute
+
             if(circ || !surfrontiere){
                 l.addMaillon(new Maillon(cell));
             }else
             {
+                //on a pas ajoute le maillon donc on reinitialise
+                //l'indicateur du fait que la cellule soit sur la frontière
                 surfrontiere=false;
             }
             a=a.getSuiv();
@@ -256,20 +283,30 @@ public class Generation {
         return grille.toString();
     }
 
-    public static void lireFichier(List grille, String nom) {
+    /**
+     * Initialisation d'une configuration à partir d'un fichier LIF
+     *
+     * @param grille la Liste à remplir
+     * @param nomFichier Le fichier qui va être lu
+     */
+    public static void lireFichier(List grille, String nomFichier) {
         try {
             int ligne = 0;
             int colonne = 0;
-            Scanner fs = new Scanner(new File(nom));
+            Scanner fs = new Scanner(new File(nomFichier));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
+                //le debut de lecture
                 if (s.matches("^#P.*")) {
                     String[] s2 = s.split(" ");
+                    //les coordonées du début
                     colonne = Integer.parseInt(s2[1]);
                     ligne = Integer.parseInt(s2[2]);
                 } else {
+
                     for (int i = 0; i < s.length(); i++) {
                         char c = s.charAt(i);
+                        //enregistrer la position quand on retrouve "*"
                         if (c == '*') {
                             if (ligne<=taille && ligne>=-taille && i+colonne <= taille && i+colonne>=-taille){
                                 Cellule cel=new Cellule(ligne, i + colonne,1);
@@ -286,9 +323,19 @@ public class Generation {
             System.out.print(e.getMessage());
         }
     }
+
+    /**
+     * Sert à passer aux mondes cirulaires
+     * @param circ
+     */
     public static void setCirc(boolean circ){
        Generation.circ=circ;
     }
+
+    /**
+     * Sert à définir les mondes fini(avec les frontières ou ciculaires)
+     * @param taille
+     */
     public static void setTaille(int taille){
         Generation.taille=taille;
     };
