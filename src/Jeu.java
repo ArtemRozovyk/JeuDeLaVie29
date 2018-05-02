@@ -67,7 +67,10 @@ public class Jeu {
         }
         //Detecter le type de comportement d'une cofiguration
         if(args.length==3&&args[0].equals("-c")){
-            System.out.println(TypeDEvolution.detecter("Folder/",args[2],Integer.parseInt(args[1])));
+            String res=TypeDEvolution.detecter("Folder/",args[2],Integer.parseInt(args[1]));
+            res=res.replaceAll("<p>","");
+            res=res.replaceAll("</p>","");
+            System.out.println(res);
         }
         //Detecter le type do comportement de toute les configurations d'un dossier
         if(args.length==3&&args[0].equals("-w")){
