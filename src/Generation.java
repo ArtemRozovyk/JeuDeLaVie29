@@ -2,15 +2,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * Permet de calculer la génération suivante en appliquant les contraintes du jeu
+ * @author Rozovyk A. Nouboussi L. Caillot M.
+ */
 public class Generation {
     /**
      * Les lignes et les collones de la Cellule étant des entiers
-     * ils ne peuvent pas depasser la valeur maximale de Integer,on la prend
+     * ne pouvant pas dépasser la valeur maximale de Integer,on la prend
      * comme limite pour la configuration "infinie";
+     *
+     *
      */
     private static int  taille=Integer.MAX_VALUE;
     /**
-     * Indique si les mondes sont circulaire
+     * Indique si les mondes sont circulaires
      * Si la valeur de "taille" est modifié
      * @see #taille
      * et circ est à faux, alors on a les mondes avec les bords.
@@ -29,8 +35,8 @@ public class Generation {
     }
 
     /**
-     * Initialise une generation à partir d'une grille existante
-     * @param grille La generation à copier
+     * Initialise une génération à partir d'une grille existante
+     * @param grille La génération à copier
      */
     public Generation (List grille){
         this.grille=grille;
@@ -47,7 +53,7 @@ public class Generation {
 
     /**
      *
-     * @return Génération correspondate
+     * @return Génération correspondante
      */
     public List<Cellule> getGrille() {
         return grille;
@@ -55,11 +61,13 @@ public class Generation {
 
 
     /**
-     * Rassamblment de toutes les fonction déstinées à calculer
+     * Rassemblment de toutes les fonctions destinées à calculer
      * la génération suivante
      * @param grille Génération initiale
      * @return Generation d'après
-     * @see #calculerSomme(List[]) {@link #sommeM0Nbvois(List, List)}{@link #eliminerNonConformes(List)}
+     * @see #calculerSomme(List[])
+     * @see #sommeM0Nbvois(List, List)
+     * @see #eliminerNonConformes(List)
      */
     public static List nextGen(List grille){
         List ng=calculerSomme(calculerProjections(grille));
@@ -70,7 +78,7 @@ public class Generation {
 
 
     /**
-     * Supprime les maillons qui contiennent les Cellules qui ne vérifient pas les régles du jeu
+     * Supprime les maillons qui contiennent les Cellules qui ne vérifient pas les règles du jeu
      *
      * @param grille Génération à "purifier"
      * @return La génération finale
@@ -92,9 +100,9 @@ public class Generation {
 
     /**
      * Recherche de la valeur minimale parmi les 8 pointeurs
-     * sur des génétaions "projetés" afin d'en trouver des doublons eventuels
+     * sur des générations "projetés" afin d'en trouver des éventuels doublons
      * parmi les autres pointeurs.
-     * @param listM Liste de maillons-pointerus sur des généraion projetes d'un vecteur (a,b) a,b={-1,1,0},a!=b!=0;
+     * @param listM Liste de maillons-pointeurs sur des génération projetés d'un vecteur (a,b) a,b={-1,1,0},a!=b!=0;
      * @return l'indice du maillon minimale
      * @see #sommeM0Nbvois(List, List)
      */
@@ -111,10 +119,10 @@ public class Generation {
     }
 
     /**
-     * Construit la liste qui indique le
-     * @param projects le tableu avec les générations projetés
+     * Construit la liste qui indique le nombre de voisins de chaque case
+     * @param projects le tableau avec les générations projetés
      * @return la Liste résultante de la somme de toutes les maillons des 8 listes
-     *      * des générations projetés d'un vecteur (a,b) a,b={-1,1,0},a!=b!=0;
+     * des générations projetés d'un vecteur (a,b) a,b={-1,1,0},a!=b!=0;
      * @see
      * #chercherVoisins(int, Maillon[])
      */
@@ -136,11 +144,11 @@ public class Generation {
     }
 
     /**
-     * Sert à trouver les doublons dans les listes des projections
+     * Sert à trouver des doublons dans les listes des projections
      * @param min l'indice du pointeur qui sert du "pivot"
      * @param listM Le tableau des pointeurs
-     * @return le Maillon resultant de l'addition de toutes Cellules
-     * ayant les mêmes coordonées que le pivot
+     * @return le Maillon résultant de l'addition de toutes Cellules
+     * ayant les mêmes coordonnées que le pivot
      */
     private static Maillon chercherVoisins(int min, Maillon[] listM) {
         int ligne =((Cellule)listM[min].getInfo()).getLigne();
@@ -160,7 +168,7 @@ public class Generation {
     }
 
     /**
-     * Sert à verifier s'il reste encore des mailons dans le talbeu des pointeurs
+     * Sert à vérifier s'il reste encore des maillons dans le tableau des pointeurs
      * @param listM Le tableau des pointeurs
      * @return Vrai si tout les pointeurs sont null
      */
@@ -177,7 +185,8 @@ public class Generation {
      * et de la liste résultant de la somme de tout les maillons dans des listes des projections.
      * @param m0 configuration initiale
      * @param somme La somme des 8 projections
-     * @return La liste qui permet de deduire la generation suivante (nescessite l'élimination des cellules qui restent pas dans la generation suivante)
+     * @return La liste qui permet de déduire la génération suivante
+     * (nécessite l'élimination des cellules qui restent pas dans la génération suivante)
      */
     private static List sommeM0Nbvois(List m0, List somme){
 
@@ -226,10 +235,10 @@ public class Generation {
     }
 
     /**
-     * Ajouter le vecteur donné à chaque couple ligne,colonne de la generation
+     * Ajouter le vecteur donné à chaque couple (ligne,colonne) de la generation
      * @param grille Génération initialle
      * @param couple Le vector à appliquer
-     * @return La generation projeté d'un vecteur
+     * @return La génération projeté d'un vecteur
      */
     public static List projeter(List grille, Couple couple) {
         List l = new List();
@@ -241,18 +250,19 @@ public class Generation {
 
             int cellueLgn=((Cellule)a.getInfo()).getLigne();
             int celulleCln=((Cellule)a.getInfo()).getColonne();
-            //si la celulle projete de vecteur est depasse la taille ou la taille*(-1)
-            //on concult qu'elle est sur le bord
+
+           //si on est dans les mondes fini
+            if(taille!=Integer.MAX_VALUE){
+                //si la celulle projete de vecteur est depasse la taille ou la taille*(-1)
+                //on concult qu'elle est sur le bord
             if (cplColonne+celulleCln>taille){
                 celulleCln=-taille-cplColonne;
                 surfrontiere=true;
             }
-
             if (cplColonne+celulleCln<-taille){
                 celulleCln=taille-cplColonne;
                 surfrontiere=true;
             }
-
             if (cplLigne+cellueLgn>taille){
                 cellueLgn=-taille-cplLigne;
                 surfrontiere=true;
@@ -261,10 +271,10 @@ public class Generation {
                 cellueLgn=taille-cplLigne;
                 surfrontiere=true;
             }
+            }
 
             Cellule cell=new Cellule(cplLigne+cellueLgn,cplColonne+celulleCln,1);
             //si les mondes circulaires ou la celulle est à l'interieur on l'ajoute
-
             if(circ || !surfrontiere){
                 l.addMaillon(new Maillon(cell));
             }else
@@ -325,16 +335,16 @@ public class Generation {
     }
 
     /**
-     * Sert à passer aux mondes cirulaires
-     * @param circ
+     * Sert à passer aux mondes circulaires
+     * @param circ vrai indique les mondes circulaires
      */
     public static void setCirc(boolean circ){
        Generation.circ=circ;
     }
 
     /**
-     * Sert à définir les mondes fini(avec les frontières ou ciculaires)
-     * @param taille
+     * Sert à définir les mondes fini(avec les frontières ou circulaires)
+     * @param taille la taille des frontières
      */
     public static void setTaille(int taille){
         Generation.taille=taille;

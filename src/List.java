@@ -1,15 +1,36 @@
+/**
+ * La Class de la Liste générique
+ * <p>Une List est caractérisé par :
+ * <ul>
+ *     <li>Sa tête, premier Maillon de la List</li>
+ * </ul>
+ * </p>
+ *
+ * @param <T> la class des éléments de la List
+ * @author Caillot M. Rozovyk A.
+ */
 public class List<T extends Comparable<T>> {
-
+    /**
+     * Tête de la List
+     *
+     * <p>Aller voir la class Maillon pour plus d'informations</p>
+     * @see Maillon
+     */
     Maillon<T> tete;
 
-
-
-
-
+    /**
+     * Constructeur par défault
+     * <p>La tête est mis a null à sa création</p>
+     * @see List#tete
+     */
     public List(){
         tete = null;
     }
 
+    /**
+     * Renvoie une copie de la List
+     * @return la List copié
+     */
     public List copyOf(){
         List l = new List();
         Maillon a = tete;
@@ -20,6 +41,13 @@ public class List<T extends Comparable<T>> {
         return l;
     }
 
+    /**
+     * Permet d'ajouter un Maillon à la List
+     *
+     * <p>Chaque Maillon est inséré dans sa place en respectant l'ordre de la liste</p>
+     *
+     * @param maillon Maillon a ajouté dans la List
+     */
     public void addMaillon(Maillon maillon){
         if(tete == null){
             tete = maillon;
@@ -45,6 +73,10 @@ public class List<T extends Comparable<T>> {
         }
     }
 
+    /**
+     * Renvoie le String de la List
+     * @return renvoie la List sous forme d'une chaîne de caractères
+     */
     @Override
     public String toString(){
         String s = "[";

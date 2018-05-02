@@ -1,6 +1,7 @@
 /**
- * Cette classe contient des methodes qui servent à
+ * Cette classe contient des méthodes qui servent à
  * detecter le type d'évolution d'une configuration du Generation
+ * @author Rozovyk A.
  */
 
 public class TypeDEvolution {
@@ -12,13 +13,13 @@ qu’un du type oscillateur est du type vaisseau
  */
 
     /**
-     * Sert à déterminer le type d'evoulution en appelant les methodes
+     * Sert à déterminer le type d'evoulution en appelant les méthodes
      * qui testent le comportement de la génération.
      *
      * @param folder Le nom du dossier dans lequel se trouve le fichier
      * @param nomFichier
      * @param i Le nombre maximal d'evolutions à générer pour chaque test
-     * @return La chaine de caractère composé d'un ou plusieurs type d'evolution
+     * @return La chaîne de caractère composé d'un ou plusieurs type d'evolution
      * detecté
      */
      static String detecter(String folder,String nomFichier, int i) {
@@ -42,8 +43,8 @@ qu’un du type oscillateur est du type vaisseau
      * Le Comportement correspondant à une grille vide
      * @param grille Configuration initiale
      * @param max Le nombre maximal d'evolutions à générer
-     * @return La chaine de caractères indiquand si c'est mort (la chaine vide sinon)
-     * aisni que le nombre de generations avant de mourir
+     * @return La chaîne de caractères indiquant si c'est mort (la chaîne vide sinon)
+     * ainsi que le nombre de générations avant de mourir
      */
     private static String mort(List<Cellule> grille, int max) {
         //on avance une génération justqu'à détécter que la liste est vide
@@ -64,12 +65,12 @@ qu’un du type oscillateur est du type vaisseau
 
     /**
      * Le Comportement correspondant à un vaisseau
-     * i.e. une strucure qui se déplace infiniment dans une direction
+     * i.e. une structure qui se déplace infiniment dans une direction
      *
      * @param grille Configuration initiale
      * @param max Le nombre maximal d'evolutions à générer
-     * @return La chaine de caractères indiquand si c'est un vaisseau (la chaine vide sinon)
-     *      * aisni que la période et la queue
+     * @return La chaîne de caractères indiquant si c'est un vaisseau (la chaîne vide sinon)
+     *      * ainsi que la période et la queue
      */
     public static String vaisseau(List grille, int max){
         int periode=0,queue=0;
@@ -107,11 +108,13 @@ qu’un du type oscillateur est du type vaisseau
     }
 
     /**
-     * Algorithme servant à trouver la similitude de deux generations
+     * Algorithme servant à trouver la similitude de deux générations
      * après un certain nombre de génération
-     * @param unPas La generation qui avance une fois a chaque éxécution
+     * @param unPas La génération qui avance une fois a chaque exécution
      * @param deuxPas Cette génération avance deux fois
-     * @see {@link #vaisseau(List, int)} (List, int)} {@link #oscillateur(List, int)} {@link #stable(List, int)}
+     * @see #vaisseau(List, int)
+     * @see #oscillateur(List, int)
+     * @see #stable(List, int)
      */
     public static void avancerUnPasDeuxPas(Generation unPas,Generation deuxPas){
         unPas.setGrille(Generation.nextGen(unPas.getGrille()));
@@ -123,9 +126,9 @@ qu’un du type oscillateur est du type vaisseau
      * Configuration qui n'évolue plus
      * @param grille Configuration initiale
      * @param max Le nombre maximal d'evolutions à générer
-     * @return La chaine de caractères indiquand si
+     * @return La chaine de caractères indiquant si
      * la configuration est  stable (la chaine vide sinon)
-     * aisni que la queue associé
+     * ainsi que la queue associé
      */
     public static String stable (List grille, int max){
         int i =0;
@@ -159,9 +162,9 @@ qu’un du type oscillateur est du type vaisseau
      * Configuration que l’on retrouve à intervalle régulier
      * @param grille Configuration initiale
      * @param max Le nombre maximal d'evolutions à générer
-     * @return La chaine de caractères indiquand si
+     * @return La chaine de caractères indiquant si
      * la configuration est oscillante (la chaine vide sinon)
-     * aisni que la queue et la période associé
+     * ainsi que la queue et la période associé
      */
     public static String oscillateur(List grille, int max){
         int i =0;
@@ -202,8 +205,9 @@ qu’un du type oscillateur est du type vaisseau
      * Detecte si deux configurations sont exactement les mêmes
      * @param g1 La première configuration
      * @param g2 La deuxième configuration
-     * @return Vrai si les deux generation sont identiques
-     * @see #oscillateur(List, int) {@link #stable(List, int)}
+     * @return Vrai si les deux génération sont identiques
+     * @see #oscillateur(List, int)
+     * @see #stable(List, int)
      */
     public static boolean egaux (List g1,List g2){
         Maillon a = g1.tete;
@@ -226,12 +230,12 @@ qu’un du type oscillateur est du type vaisseau
     }
 
     /**
-     * Detecte si la diference de deux générations montre un déplacement 
+     * Détecte si la difference de deux générations montre un déplacement
      * de A lignes et B colones
      * @param g1 La première configuration
      * @param g2 La deuxième configuration
      * @return Vrai si la deuxième génération 
-     * est la pemière déplaces de A lignes et B colones
+     * est la première déplaces de A lignes et B colonnes
      * @see #vaisseau(List, int) 
      */
     public static boolean diffVaiss(List g1,List g2){

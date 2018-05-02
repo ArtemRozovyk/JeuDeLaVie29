@@ -1,69 +1,96 @@
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Affichage dans la fenetre
+ * @author Nouboussi L. Rozovyk A.
+ */
 public class Frame extends JFrame {
-    JPanel2 pannel = new JPanel2();
-    int lligne, lcolonne;
+    JPanel2 panel = new JPanel2();
 
 
     public Frame(List grille) {
-        super("Cyka nuggets");
-
+        super("Priviet");
+        //la taille de fenetre
         setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width-900, Toolkit.getDefaultToolkit().getScreenSize().height - 400));
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        getContentPane().add(pannel);
-        pannel.setSize(getContentPane().getPreferredSize().width, getContentPane().getPreferredSize().height);
+        getContentPane().add(panel);
+        panel.setSize(getContentPane().getPreferredSize().width, getContentPane().getPreferredSize().height);
 
 
 
     }
 
-    public void dessinerMatrice(List grille) {
-        getContentPane().remove(pannel);
-        pannel = new JPanel2(grille, lligne, lcolonne);
-        getContentPane().add(pannel);
+    /**
+     * Reinitialise le contenu du Jrame par un nouveau panel
+     * @param grille la liste avec les coordonnées à insérer
+     */
+    public void reset(List grille) {
+        getContentPane().remove(panel);
+        panel = new JPanel2(grille);
+        getContentPane().add(panel);
     }
-    public static void resetMatrice(Frame frame) {
-        frame.remove(frame.pannel);
+
+    /**
+     * Retire le contenu de la fenêtre
+     * @param frame
+     */
+    public static void viderMatrice(Frame frame) {
+        frame.remove(frame.panel);
         frame.revalidate();
         frame.repaint();
     }
 
-
+    /**
+     * Reafiche le contenu de la grille qui vient d'être initialisé par une génération
+     * @param frame la fenetre
+     * @param grille La génération avec les coordonnées
+     */
     public static void dessinerMatrice(Frame frame, List grille) {
-        frame.pannel.removeAll();
-        frame.dessinerMatrice(grille);
-        frame.add(frame.pannel);
+        frame.panel.removeAll();
+        frame.reset(grille);
+        frame.add(frame.panel);
         frame.setVisible(true);
         frame.revalidate();
         frame.repaint();
     }
 
-
+    /**
+     * L'element contenu dans le JFrame
+     */
     class JPanel2 extends JPanel {
 
         List grille;
         int longLigne, longColonne;
 
+        /**
+         * Un panel vide
+         */
         public JPanel2() {
             grille = null;
             longLigne = longColonne = 0;
         }
 
-        public JPanel2(List grille, int longLigne, int longColonne) {
+        /**
+         * Creer un panel à partir d'une configuration
+         * @param grille la configuration
+         */
+        public JPanel2(List grille) {
             this.grille = grille;
-            this.longLigne = longLigne;
-            this.longColonne = longColonne;
+
         }
 
+        /**
+         * Remplir le panel avec les "Oval" suivant les coordonnées de la grille
+         * @param g
+         */
         @Override
         public void paintComponent(Graphics g) {
             Maillon a = grille.tete;
 
             while (a != null) {
-                //ne pas chercher à comprendre comment ça marche(!)
+
                 g.fillOval((getWidth()) / 2 + ((Cellule)a.getInfo()).getColonne() * 7,
                         (getHeight()) / 2 - ((Cellule)a.getInfo()).getLigne() * 7, 7, 7);
                 a = a.getSuiv();

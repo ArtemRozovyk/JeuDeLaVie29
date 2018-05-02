@@ -4,8 +4,14 @@ import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
+/**
+ * Vérification du bon fonctionnement de la liste chainée
+ */
 public class ListTest {
-
+    /**
+     * Teste si la duplication fonctionne de même façon que
+     * dans la classe LinkedList de l'API Java
+     */
     @Test
     public void copyOf() {
         //LinkedList de api Java pour comparer avec la liste initiale et la copie
@@ -43,6 +49,10 @@ public class ListTest {
 
     }
 
+    /**
+     * Teste L'instertion basique, insertion au début, à la fin et au milieu de la liste
+     * Conservation d'ordre
+     */
     @Test
     public void addMaillon() {
         List l=new List();

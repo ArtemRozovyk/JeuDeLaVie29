@@ -3,13 +3,14 @@ import java.io.*;
 import java.util.Scanner;
 
 /**
- *
+ * Gestion de l'executable
+ * @author Rozovyk A.
  */
 public class Jeu {
 
 
     /**
-     * Initialise l'affichage de generations d'une configuration
+     * Initialise l'affichage de générations d'une configuration
      * lue à partir d'un fichier LIF
      * @param nom Fichier avec la configuration initiale
      * @param duree Le nombre de génération à générer
@@ -25,9 +26,9 @@ public class Jeu {
             gen.setGrille(Generation.nextGen(gen.getGrille()));
             try {
                 //reinitialiser l'affichage et attendre n milisecondes
-                Frame.resetMatrice(frame);
+                Frame.viderMatrice(frame);
                 Frame.dessinerMatrice(frame, gen.getGrille());
-                Thread.sleep(20);
+                Thread.sleep(15);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -36,14 +37,14 @@ public class Jeu {
     }
 
     /**
-     * Analyse les agrument donnés par l'utilisateur lors de l'execution du programme
-     * (de l'executable .jar) Appele les fonction correspondante suivant le choix
+     * Analyse les argument donnés par l'utilisateur lors de l'execution du programme
+     * (de l'executable .jar) Appelle les fonctions correspondantes suivant le choix
      * @param args Les paramètres donnés par l'utilisateur
      */
     public static void options(String[] args) {
         //affichage des prenoms
         if(args.length==1&&args[0].equals("-name"))
-            System.out.println("Rozovyk,Nouboussi,Caillot,(Salmon)");
+            System.out.println("Rozovyk,Nouboussi,Caillot,Salmon");
         //mode d'emploi
         if(args.length==1&&args[0].equals("-h")){
             System.out.println("-name :\n  pour afficher les noms");
@@ -96,8 +97,8 @@ public class Jeu {
     }
 
     /**
-     * Calcule les comportements de chaque configuraion contenue dans le dossier Folder,
-     * Affiche le resultat dans une page HTLM qui s'ouvre dans le navigateur par défaut.
+     * Calcule les comportements de chaque configuration contenue dans le dossier Folder,
+     * Affiche le résultat dans une page HTLM qui s'ouvre dans le navigateur par défaut.
      * @param nomDossier
      * @param max Le nombre maximale de génération à générer
      */
@@ -117,9 +118,9 @@ public class Jeu {
     }
 
     /**
-     * Ecrire le resultat de comportmenets de configurations d'un dossier dans un ficher
+     * Ecrire le resultat des comportements des configurations d'un dossier dans un ficher
      * HTML et l'afficher dans le navigateur par défaut
-     * @param res Le String qui contient toutes les résultats des comportements
+     * @param res Le String qui contient tout les résultats des comportements
      */
     static public void modifyFile(String res){
         File fileToBeModified = new File("html/new.html");
